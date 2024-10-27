@@ -1,10 +1,33 @@
 (async function() {
     'use strict';
 
-// Initialize variables
-let username = await getUsername();  // Function to get username from storage
-let moveHistory = [];
-let lastBoardState = [];
+ // Initialize variables
+ let username = await getUsername();
+ let moveHistory = [];
+ let lastBoardState = [];
+ let isScriptEnabled = true; // New variable to track script enable state
+
+ // Load script enable state from storage
+ chrome.storage.local.get('isScriptEnabled', (data) => {
+     isScriptEnabled = data.isScriptEnabled !== undefined ? data.isScriptEnabled : true; // Default to true
+     if (!isScriptEnabled) {
+         console.log("Script is disabled.");
+         return; // Exit if the script is disabled
+     }
+ });
+
+ // Listener to handle messages from popup.js
+ chrome.runtime.onMessage.addListener((message) => {
+     if (message.type === "toggleAutoQueue") {
+         isAutoQueueOn = message.isAutoQueueOn;
+     } else if (message.type === "toggleScript") {
+         isScriptEnabled = message.isScriptEnabled;
+         if (!isScriptEnabled) {
+             console.log("Script disabled.");
+             // Add any cleanup code if necessary
+         }
+     }
+ });
 
 // If username is not set, prompt the user and save it to storage
 if (!username) {
@@ -178,7 +201,11 @@ function simulateCellClick(column) {
 setInterval(function() {
     checkForResetButtons();
 }, 500);
-    setInterval(getAPIEvaluation, 10);
+setInterval(() => {
+    if (isScriptEnabled) {
+        getAPIEvaluation(); // or any other functions you want to call periodically
+    }
+}, 10);
 
     console.log("Modified Connect 4 script loaded and running");
 
