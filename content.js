@@ -195,6 +195,11 @@ function simulateCellClick(column) {
         if (playOnlineButton || leaveRoomButton || customResetButton) {
             resetVariables();
         }
+        if (window.location.href === "https://papergames.io/en/match-history" ||
+            window.location.href === "https://papergames.io/en/friends" ||
+            window.location.href === "https://papergames.io/en/chat") {
+            resetVariables();
+        }
     }
 
     //Checking If the game is over so it can reset variables
