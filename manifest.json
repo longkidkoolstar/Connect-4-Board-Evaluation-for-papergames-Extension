@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Connect 4 Board Evaluation",
-    "version": "0.4.1",
+    "version": "1.0",
     "description": "Displays best moves for both players in Papergames Connect 4.",
     "permissions": ["storage", "scripting", "activeTab"], 
     "icons": {
